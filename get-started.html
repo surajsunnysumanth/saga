@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get started — Saga</title>
+<meta name="description" content="Download Saga for Mac, open your Android backup with its 64-digit key, and build a searchable archive on your own disk.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f8f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B141A" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://surajsunnysumanth.github.io/saga/get-started.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Saga">
+<meta property="og:title" content="Get started — Saga">
+<meta property="og:description" content="Download Saga for Mac, open an Android backup with its 64-digit key, and keep the archive on your own disk.">
+<meta property="og:url" content="https://surajsunnysumanth.github.io/saga/get-started.html">
+<meta property="og:image" content="https://surajsunnysumanth.github.io/saga/assets/images/social.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Get started — Saga">
+<meta name="twitter:description" content="From a clean Mac to a searchable archive, without uploading anything.">
+<meta name="twitter:image" content="https://surajsunnysumanth.github.io/saga/assets/images/social.jpg">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="container">
+<a class="brand" href="index.html"><img src="assets/favicon.png" alt="" width="36" height="36">Saga</a>
+<nav aria-label="Main"><ul><li><a href="features.html">Features</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="faq.html">FAQ</a></li><li><a href="https://github.com/surajsunnysumanth/saga">GitHub</a></li></ul></nav>
+<a class="button header-cta" href="https://github.com/surajsunnysumanth/saga/releases/latest/download/Saga.dmg">Download</a>
+</div></header>
+
+<main id="main" tabindex="-1">
+<section class="hero hero--page hero--solo"><div class="container">
+<div class="hero-copy">
+<h1>Get started</h1>
+<p class="lead">Download the app, then point it at a backup you already own.</p>
+<div class="actions"><a class="button" href="https://github.com/surajsunnysumanth/saga/releases/latest/download/Saga.dmg">Download for Mac</a><a class="text-link" href="#build">Prefer to build it?</a></div>
+<p class="caption">Version 1.0.5, universal build for Apple silicon and Intel, 14.8 MB.</p>
+</div>
+</div></section>
+
+<div class="container prose">
+<section id="download">
+<h2>Download and open it</h2>
+<p>Saga ships as a disk image. Open it, drag Saga into Applications, and launch it. The first launch may ask for permission to read Contacts, which is how names replace phone numbers.</p>
+<p>Builds are ad-hoc signed while the project has no Apple Developer certificate, so macOS stops the first launch with <em>Apple could not verify “Saga” is free of malware</em>. Click <strong>Done</strong>, open <strong>System Settings → Privacy &amp; Security</strong>, scroll to <strong>Security</strong>, click <strong>Open Anyway</strong> beside Saga, then confirm with your password. The button only appears for about an hour after a blocked launch; if it is missing, launch Saga again and go straight back to Settings. On macOS 14, right-click Saga in Finder and choose <strong>Open</strong> instead. Download Saga only from this page or the <a href="https://github.com/surajsunnysumanth/saga/releases">GitHub releases</a>.</p>
+</section>
+
+<section id="requirements">
+<h2>What you need</h2>
+<p>macOS 14 or later. An Android backup, and its 64-digit encryption key — not the password you may have chosen for the backup. Room on disk for the vault, the search index and temporary files. iPhone import is experimental and does not replace a full Android backup.</p>
+</section>
+
+<section id="android">
+<h2>Import from Android</h2>
+<p>Open Saga and follow the wizard: USB setup or an existing backup file, the encryption key, a contact-name source, where the vault goes. When the import and index finish, open a chat or search for a word you remember.</p>
+<p>Encryption is optional and off by default; turn it on after the first import. <a href="privacy.html">Privacy</a> explains what stays readable either way.</p>
+</section>
+
+<section id="more-history">
+<h2>Add more history</h2>
+<p>Import older backups to fill the gaps, or update from a newer full backup. Saga matches messages across imports, and keeps what it has already seen.</p>
+</section>
+
+<section id="build">
+<h2>Build from source</h2>
+<p>Install a Swift 6 toolchain and the macOS developer tools, then run this from a checkout.</p>
+<pre><code>swift build -c release
+scripts/make_app.sh --universal
+open build/Saga.app</code></pre>
+<p>Source builds are ad-hoc signed too, so the first launch takes the same extra step.</p>
+</section>
+
+<section id="demo">
+<h2>Try it with sample data</h2>
+<p>Saga can build its own demo archive: 20,600 messages, 14 conversations, three years. It is the archive behind the screenshots and the sample Wrapped.</p>
+<pre><code>swift build
+.build/debug/saga demo --out ~/saga-demo
+.build/debug/SagaApp --demo ~/saga-demo</code></pre>
+<p>The folder holds a vault and a local index. It refuses to overwrite an existing folder, so pick a new path each time.</p>
+</section>
+
+<section id="troubleshooting">
+<h2>If setup stops</h2>
+<p>For USB trouble, check the cable, USB debugging and the phone's permission prompt. For decryption errors, confirm the backup and the key belong together. If you report a problem, describe the steps and the error — never upload messages, contacts, backups or keys.</p>
+</section>
+</div>
+</main>
+
+<footer class="site-footer"><div class="container">
+<p>Saga is an independent open-source project. It is not affiliated with, endorsed by, or sponsored by WhatsApp or Meta. WhatsApp is a trademark of its respective owner. All screenshots use invented data.</p>
+<nav aria-label="Footer"><a href="privacy.html">Privacy</a><a href="get-started.html">Get started</a><a href="https://github.com/surajsunnysumanth/saga">GitHub</a><a href="https://github.com/surajsunnysumanth/saga/blob/main/LICENSE">License</a></nav>
+</div></footer>
+</body>
+</html>
