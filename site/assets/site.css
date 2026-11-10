@@ -1,0 +1,1000 @@
+/*
+  Saga site stylesheet.
+
+  One stylesheet for every page. The token block below is the single source of
+  truth for colour, type, space, radii, elevation, borders and motion; component
+  rules further down only ever consume those tokens. Values come from
+  docs/DESIGN.md (WhatsApp palette, editorial type, chunky cards).
+
+  Contrast, measured (WCAG 2.1, see the ratios next to each pairing):
+    ink/paper 17.5 · ink-soft/paper 5.7 · ink-soft/surface 6.1
+    ink-soft/sand 5.1 · accent-ink/surface 4.1 (large text + UI only)
+    accent-ink-strong/paper 4.9 (small text, links) · ink/green-soft 16.2
+    ink-on-accent/green 9.4 · white/teal 7.7 · band-muted/teal 5.3
+  Small text never uses #128C7E (3.9:1): it uses --green-ink-strong.
+*/
+
+:root {
+  color-scheme: light dark;
+
+  /* ── colour primitives ───────────────────────────────────────────────── */
+  --teal: #075E54;
+  --teal-deep: #054C44;
+  --green: #25D366;
+  --green-hover: #1EBE5A;
+  --green-soft: #DCF8C6;
+  --green-ink: #128C7E;
+  --green-ink-strong: #0B7A6A;
+  --green-ink-deep: #0A6E60;   /* 5.1:1 on --sand, for links inside the warm band */
+  --ink: #0B141A;
+  --ink-soft: #54656F;
+  --line: #E9EDEF;
+  --paper: #F7F8F6;
+  --surface: #FFFFFF;
+  --sand: #EFEAE2;
+  --focus: #086BCA;
+
+  /* ── semantic colour ─────────────────────────────────────────────────── */
+  --color-bg: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-sunk: var(--sand);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--green);
+  --color-accent-hover: var(--green-hover);
+  --color-accent-soft: var(--green-soft);
+  --color-accent-ink: var(--green-ink);
+  --color-accent-ink-strong: var(--green-ink-strong);
+  --color-accent-ink-deep: var(--green-ink-deep);
+  --color-on-accent: var(--ink);
+  --color-focus: var(--focus);
+  --color-selection-bg: var(--green-soft);
+  --color-selection-ink: var(--ink);
+  /* The one dark band a page may use: the privacy promise. */
+  --color-band-bg: var(--teal);
+  --color-band-bg-hover: var(--teal-deep);
+  --color-band-ink: #FFFFFF;
+  --color-band-muted: #B9DED6;
+  --color-band-accent: var(--green);
+
+  /* ── type ────────────────────────────────────────────────────────────── */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-xs: 0.8125rem;                                    /* 13px */
+  --text-caption: 0.875rem;                                /* 14px */
+  --text-nav: 0.9375rem;                                   /* 15px */
+  --text-body: 1.0625rem;                                  /* 17px */
+  --text-lead: clamp(1.125rem, 1.9vw, 1.25rem);            /* 18–20px */
+  --text-h4: 1.125rem;                                     /* 18px */
+  --text-h3: 1.3125rem;                                    /* 21px, card titles */
+  --text-h2: clamp(1.75rem, 3.4vw, 2.375rem);              /* 28–38px */
+  --text-h1: clamp(2.5rem, 6.6vw, 4.5rem);                 /* 40–72px */
+  --text-brand: 1.6rem;                                    /* header wordmark */
+  --text-print-h1: 2.5rem;                                 /* print only */
+
+  --leading-display: 1.06;
+  --leading-heading: 1.12;
+  --leading-tight: 1.35;
+  --leading-body: 1.6;
+  --leading-lead: 1.55;
+
+  --tracking-display: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-label: 0.1em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 650;
+  --weight-heavy: 700;
+
+  /* ── space (4px base) ────────────────────────────────────────────────── */
+  --space-1: 0.25rem;   /*  4px */
+  --space-2: 0.5rem;    /*  8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 2.5rem;    /* 40px */
+  --space-9: 3rem;      /* 48px */
+  --space-10: 4rem;     /* 64px */
+  --space-11: 6rem;     /* 96px */
+
+  /* ── layout rhythm ───────────────────────────────────────────────────── */
+  --content-max: 70rem;                              /* 1120px column */
+  --gutter: clamp(1.25rem, 4vw, 1.75rem);            /* 20 → 28px page gutters */
+  --section-space: clamp(3.5rem, 9vw, 7rem);         /* 56 → 112px */
+  --section-space-tight: clamp(2.5rem, 5vw, 4rem);
+  --hero-space: clamp(3rem, 7vw, 5.5rem);
+  --heading-gap: var(--space-3);                     /* heading → body */
+  --block-gap: var(--space-5);                       /* paragraph rhythm */
+  --card-padding: clamp(1.5rem, 2.4vw, 1.75rem);     /* 24 → 28px */
+  --card-gap: var(--space-5);
+  --measure-prose: 68ch;
+  --measure-body: 60ch;
+  --measure-lead: 46ch;
+
+  /* ── radii ───────────────────────────────────────────────────────────── */
+  --radius-card: 20px;
+  --radius-media: 16px;
+  --radius-input: 14px;
+  --radius-pill: 999px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+
+  /* ── elevation ───────────────────────────────────────────────────────── */
+  --shadow-card: 0 1px 2px rgb(11 20 26 / 4%);
+  --shadow-raised: 0 1px 2px rgb(11 20 26 / 5%), 0 12px 32px rgb(11 20 26 / 7%);
+  --shadow-media: 0 18px 44px rgb(11 20 26 / 14%), 0 2px 6px rgb(11 20 26 / 6%);
+
+  /* ── borders ─────────────────────────────────────────────────────────── */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --hairline: var(--border-width) solid var(--color-line);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 5px;
+
+  /* ── motion ──────────────────────────────────────────────────────────── */
+  --duration-fast: 0.15s;
+  --duration-base: 0.2s;
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --lift: 2px;
+  --transition-control: background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+  --transition-card: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+
+  /* ── controls and media ──────────────────────────────────────────────── */
+  --control-height: 48px;
+  --tap-target: 44px;
+
+  /* ── device frame: the live Wrapped demo is a phone-sized story ───────── */
+  --device-max-height: min(820px, 80vh);
+  --device-max-height: min(820px, 80svh);
+  --device-ratio: 9 / 19.5;
+  --device-width: min(390px, 100%, calc(var(--device-max-height) * 9 / 19.5));
+  --device-bezel: clamp(7px, 2vw, 10px);
+  --device-radius: 46px;
+  --device-screen-radius: calc(var(--device-radius) - var(--device-bezel));
+  --device-surface: linear-gradient(150deg, var(--surface) 0%, var(--sand) 58%, var(--line) 100%);
+  --device-edge: rgb(11 20 26 / 14%);
+  --device-highlight: rgb(255 255 255 / 88%);
+  --device-slot: rgb(11 20 26 / 45%);
+  --device-glass: inset 0 0 0 var(--border-width) var(--device-slot),
+    inset 0 1px 5px rgb(0 0 0 / 30%);
+  --device-glare: linear-gradient(122deg, rgb(255 255 255 / 9%) 0%, rgb(255 255 255 / 3%) 28%, transparent 46%);
+  --shadow-device: inset 0 1px 0 var(--device-highlight),
+    inset 0 0 0 var(--border-width) var(--device-edge),
+    0 1px 2px rgb(11 20 26 / 8%),
+    0 18px 38px rgb(11 20 26 / 12%),
+    0 44px 90px rgb(11 20 26 / 12%);
+  --device-tilt: 0deg;
+
+  /* ── the drawn homepage underline ─────────────────────────────────────── */
+  --ink-mark-stroke: clamp(2px, 0.24vw, 3px);     /* the drawn stroke reads at 40px and 72px */
+  --ink-mark-drop: 0.08em;
+  --text-card-title: clamp(1.3125rem, 1.5vw, 1.5rem);  /* 21 → 24px */
+  --text-card-body: 1rem;
+  --card-grid-columns: 2;
+  --hero-copy-max: 48rem;
+  --hero-heading-max: 20ch;
+  --hero-stack-gap: clamp(var(--space-8), 6vw, var(--space-11));
+}
+
+/*
+  Dark theme. The palette is the same family inverted around WhatsApp's dark
+  ink, so the accent stays the only signal.
+*/
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0B141A;
+    --surface: #121E24;
+    --sand: #16242A;
+    --ink: #E9EDEF;
+    --ink-soft: #A6B4BA;
+    --line: #2A4149;
+    --color-accent-ink: #5FD98F;
+    --color-accent-ink-strong: #5FD98F;
+    --color-accent-ink-deep: #5FD98F;
+    --color-accent-soft: #143528;
+    --color-on-accent: #04261A;
+    --color-focus: #8DC5FF;
+    --color-selection-bg: #143528;
+    --color-selection-ink: #E9EDEF;
+    --color-band-bg: #0A2A25;
+    --color-band-bg-hover: #0D3831;
+    --color-band-ink: #EAF6F2;
+    --color-band-muted: #B9DED6;
+    --device-edge: rgb(255 255 255 / 22%);
+    --device-highlight: rgb(255 255 255 / 30%);
+    --device-slot: rgb(0 0 0 / 55%);
+    --device-surface: linear-gradient(150deg, var(--line) 0%, var(--sand) 54%, var(--surface) 100%);
+    --device-glass: inset 0 0 0 var(--border-width) var(--device-edge),
+      inset 0 1px 5px rgb(0 0 0 / 55%);
+    --device-glare: linear-gradient(122deg, rgb(255 255 255 / 6%) 0%, rgb(255 255 255 / 2%) 26%, transparent 44%);
+    --shadow-device: inset 0 1px 0 var(--device-highlight),
+      inset 0 0 0 var(--border-width) var(--device-edge),
+      0 0 0 var(--border-width) rgb(255 255 255 / 10%),
+      0 1px 2px rgb(0 0 0 / 40%),
+      0 18px 38px rgb(0 0 0 / 45%),
+      0 44px 90px rgb(0 0 0 / 40%);
+    --shadow-media: 0 18px 44px rgb(0 0 0 / 55%), 0 2px 6px rgb(0 0 0 / 30%);
+  }
+}
+
+/* ── base ──────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+html { scroll-padding-top: var(--space-7); }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+[hidden] { display: none !important; }
+a { color: var(--color-accent-ink-strong); text-underline-offset: 0.22em; text-decoration-thickness: 0.075em; }
+a:hover { color: var(--color-ink); }
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-xs);
+}
+::selection { color: var(--color-selection-ink); background: var(--color-selection-bg); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+img, video, svg { max-width: 100%; height: auto; }
+iframe { width: 100%; border: var(--hairline); border-radius: var(--radius-card); }
+
+/* ── media: screenshots from the synthetic demo archive ────────────────── */
+figure { margin: var(--space-7) 0; }
+figcaption, small, .caption {
+  color: var(--color-ink-soft);
+  font-size: var(--text-caption);
+  line-height: var(--leading-tight);
+}
+/* A screenshot is a bare window: rounded corners and its own shadow, no chrome. */
+.screenshot { margin: 0; }
+.screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: var(--radius-media);
+  background: var(--color-surface-sunk);
+  box-shadow: var(--shadow-media);
+}
+.screenshot--hero figcaption { text-align: center; }
+
+/* The live demo is a phone-sized story that sits in a feature row beside its
+   copy. Width follows the device ratio and is capped by the viewport height, so
+   the same object reads at 390, 768 and 1440 without ever touching the edges. */
+.phone-figure {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+}
+.phone-figure::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 2%;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: radial-gradient(closest-side, var(--color-accent-soft), transparent 74%);
+  opacity: 0.8;
+}
+.phone {
+  position: relative;
+  z-index: 0;
+  width: var(--device-width);
+  max-width: 100%;
+  padding: var(--device-bezel);
+  padding-top: calc(var(--device-bezel) * 2.4);
+  border-radius: var(--device-radius);
+  background: var(--device-surface);
+  box-shadow: var(--shadow-device);
+  transform: rotate(var(--device-tilt));
+}
+/* Speaker slot in the top bezel: the frame reads as an object, not a border. */
+.phone::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--device-bezel) * 0.9);
+  left: 50%;
+  width: 26%;
+  height: 4px;
+  margin-left: -13%;
+  border-radius: var(--radius-pill);
+  background: var(--device-slot);
+  box-shadow: inset 0 1px 0 var(--device-highlight);
+}
+.phone-screen {
+  position: relative;
+  aspect-ratio: var(--device-ratio);
+  overflow: hidden;
+  border-radius: var(--device-screen-radius);
+  background: var(--color-band-bg);
+  box-shadow: var(--device-glass);
+}
+/* A faint diagonal reflection: glass over the page, never a wash. */
+.phone-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: var(--device-glare);
+  pointer-events: none;
+}
+.demo-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: var(--color-band-bg);
+  display: block;
+}
+.phone-figure figcaption { max-width: 38ch; text-align: center; }
+/* The ring lives on the screen edge: an iframe outline would be clipped, and CSS
+   :focus-within cannot see focus that moved into the child document, so the frame's
+   own focus/blur events toggle a class on the screen instead. */
+.demo-frame:focus { outline: none; }
+.demo-frame:focus-visible { outline: none; }
+.phone-screen:focus-within,
+.phone-screen.is-focused {
+  box-shadow: var(--device-glass),
+    0 0 0 var(--focus-ring-width) var(--color-focus);
+}
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  margin-top: var(--space-5);
+}
+/* Wide screens get a slight tilt, like a phone resting on a desk. */
+@media (min-width: 1000px) {
+  .phone { --device-tilt: -1.4deg; }
+}
+
+/* ── type scale ────────────────────────────────────────────────────────── */
+p, ul, ol, dl { margin-block: 0 var(--block-gap); }
+p:last-child, ul:last-child, ol:last-child { margin-bottom: 0; }
+li + li { margin-top: var(--space-2); }
+h1, h2, h3, h4 {
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  margin: 0 0 var(--heading-gap);
+  font-weight: var(--weight-bold);
+  color: var(--color-ink);
+}
+h1 {
+  font-size: var(--text-h1);
+  line-height: var(--leading-display);
+  max-width: var(--hero-heading-max);
+  font-weight: var(--weight-bold);
+}
+h2 { font-size: var(--text-h2); font-weight: var(--weight-bold); }
+h3 { font-size: var(--text-h3); font-weight: var(--weight-bold); letter-spacing: var(--tracking-tight); }
+h4 { font-size: var(--text-h4); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-tight); }
+
+/* ── layout and rhythm ─────────────────────────────────────────────────── */
+.container {
+  width: min(var(--content-max), calc(100% - var(--gutter) * 2));
+  margin-inline: auto;
+}
+.skip-link {
+  position: absolute;
+  z-index: 10;
+  left: var(--gutter);
+  top: -6rem;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-ink);
+  color: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+.skip-link:focus { top: var(--space-4); }
+
+/* ── header ────────────────────────────────────────────────────────────── */
+.site-header { border-bottom: var(--hairline); background: var(--color-bg); }
+.site-header > .container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+  flex-wrap: wrap;
+  padding-block: var(--space-4);
+}
+.site-header nav[aria-label="Main"] { flex: 1; }
+.site-header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  align-items: center;
+}
+.site-header nav li { margin: 0; }
+.site-header nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-size: var(--text-nav);
+  color: var(--color-ink-soft);
+  text-decoration: none;
+}
+.site-header nav a:hover,
+.site-header nav a[aria-current="page"] {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-width-strong);
+}
+/* The download is one click away from every page. */
+.site-header .header-cta {
+  flex: 0 0 auto;
+  min-height: 2.25rem;
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.9375rem;
+  margin-left: var(--space-3);
+}
+.brand {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  color: var(--color-ink);
+  font-size: var(--text-brand);
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--weight-heavy);
+  text-decoration: none;
+  min-height: var(--tap-target);
+}
+.brand img { width: 36px; height: 36px; }
+
+/* ── hero ──────────────────────────────────────────────────────────────── */
+/* The homepage hero is centred: headline, lead, one CTA, the app beneath it.
+   Inner pages are left-aligned, so the two kinds of page never look alike. */
+.hero { padding-block: var(--hero-space); }
+.hero .container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+.hero-copy { min-width: 0; max-width: var(--hero-copy-max); }
+.hero-copy > :first-child { margin-top: 0; }
+.hero h1 { margin-bottom: 0; }
+.hero .lead { max-width: var(--measure-lead); }
+.hero .actions { margin-block: var(--space-5) 0; }
+.hero .caption { max-width: var(--measure-lead); margin-top: var(--space-4); }
+
+.hero--home .container { justify-items: center; text-align: center; }
+.hero--home .hero-copy { display: grid; justify-items: center; }
+.hero--home h1 { font-size: clamp(2.5rem, 5.4vw, 3.75rem); }
+.hero--home .actions { justify-content: center; }
+.hero--home .caption { text-align: center; }
+
+.hero--page .container { justify-items: start; text-align: left; }
+.hero--page .hero-copy { max-width: 44rem; }
+.hero--page .actions { justify-content: flex-start; }
+.hero--page h1 { max-width: 18ch; }
+/* The privacy page keeps the one dark hero. */
+.hero--page.hero--band .hero-copy { max-width: 42rem; }
+
+/* A stage hero puts the product screenshot under the copy, full width. */
+.hero--stage .container { gap: var(--hero-stack-gap); }
+.hero--stage .screenshot { width: 100%; }
+
+/* The one dark band a page may use, in hero position (Privacy). */
+.hero--band {
+  background: var(--color-band-bg);
+  color: var(--color-band-ink);
+}
+.hero--band h1 { color: var(--color-band-ink); }
+.hero--band .lead,
+.hero--band p { color: var(--color-band-muted); }
+.hero--band a { color: var(--color-band-ink); }
+.hero--band a:hover { color: var(--color-band-muted); }
+.hero--band .button {
+  background: var(--color-band-ink);
+  color: var(--color-band-bg);
+  border-color: transparent;
+}
+.hero--band .button:hover { background: var(--color-band-muted); color: var(--color-band-bg); }
+
+/* Hand-drawn accent: one inline SVG underline under one phrase, homepage only. */
+.ink-mark {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+.ink-mark-svg {
+  position: absolute;
+  left: -1%;
+  bottom: calc(var(--ink-mark-drop) * -1);
+  width: 102%;
+  height: 0.26em;
+  overflow: visible;
+  color: var(--color-accent);
+  pointer-events: none;
+}
+.ink-mark-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ink-mark-stroke);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lead {
+  font-size: var(--text-lead);
+  line-height: var(--leading-lead);
+  color: var(--color-ink-soft);
+  max-width: var(--measure-lead);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  margin-block: var(--space-7) var(--space-4);
+}
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: var(--control-height);
+  padding: var(--space-3) var(--space-5);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  text-decoration: none;
+  font-weight: var(--weight-semibold);
+  transition: var(--transition-control);
+}
+.button:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-on-accent);
+  text-decoration: none;
+}
+.button.secondary {
+  background: transparent;
+  border-color: var(--color-line);
+  color: var(--color-ink);
+}
+.button.secondary:hover { background: var(--color-surface-sunk); }
+/* A quiet second action that keeps one primary CTA in the hero. */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-ink-strong);
+}
+.hero--band .text-link,
+.section--band .text-link { color: var(--color-band-ink); }
+
+/* ── sections ──────────────────────────────────────────────────────────── */
+main > section:not(.hero) { padding-block: var(--section-space); }
+.section-heading { margin-bottom: var(--space-8); }
+
+/* The one dark band a page may use. */
+.section--band { background: var(--color-band-bg); color: var(--color-band-ink); }
+.section--band h2,
+.section--band h3 { color: var(--color-band-ink); }
+.section--band p { color: var(--color-band-muted); max-width: 58ch; }
+.section--band a { color: var(--color-band-ink); }
+.section--band a:hover { color: var(--color-band-muted); }
+
+/* Cards: chunky, hairline border, a title at reading size and one short
+   paragraph. One tinted card per group carries the main idea; body text goes
+   to full ink so the wash never costs contrast. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--card-grid-columns), minmax(0, 1fr));
+  gap: var(--card-gap);
+}
+.card-grid > * { min-width: 0; }
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--card-padding);
+  border: var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+.card > :first-child { margin-top: 0; }
+.card > :last-child { margin-bottom: 0; }
+.card h2,
+.card h3 {
+  font-size: var(--text-card-title);
+  margin-bottom: 0;
+}
+.card p {
+  color: var(--color-ink-soft);
+  font-size: var(--text-card-body);
+  line-height: var(--leading-body);
+  margin: 0;
+}
+.card--tint { background: var(--color-accent-soft); border-color: transparent; }
+.card--tint p { color: var(--color-ink); }
+
+/* Features: one repeating pattern. Each row is an image and a short text
+   column, alternating sides; a hairline between rows gives the long page
+   cadence. */
+.feature-row {
+  display: grid;
+  gap: var(--space-7);
+  align-items: center;
+  padding-block: var(--space-9);
+}
+.feature-row + .feature-row { border-top: var(--hairline); }
+.feature-row-copy { max-width: var(--measure-body); }
+.feature-row h2 { font-size: var(--text-h2); }
+.feature-row p { color: var(--color-ink-soft); }
+@media (min-width: 801px) {
+  .feature-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(var(--space-8), 5vw, var(--space-10));
+    padding-block: clamp(var(--space-9), 6vw, var(--space-10));
+  }
+  .feature-row--flip > .feature-row-media { order: -1; }
+}
+
+/* Text-only features: a plain list, no cards. */
+.feature-list {
+  padding-block: var(--section-space);
+  border-top: var(--hairline);
+}
+.feature-list h2 { margin-bottom: var(--space-6); }
+.plain-list { margin: 0; max-width: var(--measure-body); }
+.plain-list dt {
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
+  margin-top: var(--space-5);
+}
+.plain-list dt:first-child { margin-top: 0; }
+.plain-list dd {
+  margin: var(--space-1) 0 0;
+  color: var(--color-ink-soft);
+}
+
+/* FAQ: the four setup steps, drawn with the wizard's vocabulary — a card that
+   rises 4px into place, a connector that draws itself, a tick that strokes in.
+   Runs once, then rests; nothing loops, so the page stays readable. */
+.faq-map { margin: var(--space-9) 0 0; display: grid; gap: var(--space-4); }
+.faq-map-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.faq-map-step {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: var(--space-4) var(--space-4) var(--space-5);
+  border: var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  animation: faq-step-in 0.46s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 0.18s + 0.1s);
+}
+.faq-map-step b { font-size: var(--text-body); font-weight: var(--weight-semibold); }
+.faq-map-step > span:last-child { color: var(--color-ink-soft); font-size: var(--text-caption); }
+.faq-map-art { color: var(--color-accent-ink-strong); margin-bottom: var(--space-2); }
+.faq-map-art svg { width: 40px; height: 36px; display: block; }
+.faq-map-tick {
+  stroke: var(--color-accent);
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: faq-tick-in 0.4s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 0.18s + 0.5s);
+}
+/* The connector between steps draws left to right, like the wizard's progress. */
+.faq-map-step + .faq-map-step::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-5) * -1);
+  top: 50%;
+  width: var(--space-5);
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--color-accent-ink);
+  opacity: 0.55;
+  transform-origin: left center;
+  animation: faq-link-in 0.3s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 0.18s + 0.22s);
+}
+/* Arrowhead, so the strip reads as a path rather than four cards. */
+.faq-map-step + .faq-map-step::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid var(--color-accent-ink);
+  border-right: 2px solid var(--color-accent-ink);
+  transform: translateY(-50%) rotate(45deg);
+  animation: faq-chev-in 0.3s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 0.18s + 0.38s);
+}
+@keyframes faq-chev-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.faq-map figcaption { max-width: 62ch; }
+@keyframes faq-step-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes faq-link-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes faq-tick-in {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+@media (max-width: 720px) {
+  .faq-map { margin-top: var(--space-7); }
+  .faq-map-track { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .faq-map-step + .faq-map-step::before,
+  .faq-map-step + .faq-map-step::after { display: none; }
+}
+
+/* FAQ: chunky question cards in two columns. */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--card-gap);
+  align-items: start;
+}
+.faq-grid > details {
+  margin: 0;
+  padding: var(--card-padding);
+  border: var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  animation: faq-card-in 0.4s var(--ease-out) both;
+}
+.faq-grid > details:nth-child(2) { animation-delay: 0.04s; }
+.faq-grid > details:nth-child(3) { animation-delay: 0.08s; }
+.faq-grid > details:nth-child(4) { animation-delay: 0.12s; }
+.faq-grid > details:nth-child(5) { animation-delay: 0.16s; }
+.faq-grid > details:nth-child(6) { animation-delay: 0.20s; }
+.faq-grid > details:nth-child(7) { animation-delay: 0.24s; }
+.faq-grid > details:nth-child(8) { animation-delay: 0.28s; }
+.faq-grid > details:nth-child(9) { animation-delay: 0.32s; }
+.faq-grid > details:nth-child(10) { animation-delay: 0.36s; }
+@keyframes faq-card-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* The open card carries the same accent rule the wizard puts on the row it is
+   pointing at, so it is obvious which answer belongs to the question. */
+.faq-grid > details[open] {
+  box-shadow: var(--shadow-card), inset 3px 0 0 var(--color-accent-ink);
+}
+.faq-grid > details > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding-right: 0;
+  list-style: none;
+}
+.faq-grid > details > summary::-webkit-details-marker { display: none; }
+.faq-grid > details > summary::after {
+  content: "+";
+  flex: none;
+  font-weight: var(--weight-regular);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-ink-soft);
+}
+.faq-grid > details[open] > summary::after { content: "\2212"; }
+.faq-grid > details > p { max-width: none; }
+
+/* ── long-form prose ───────────────────────────────────────────────────── */
+.prose {
+  max-width: var(--measure-prose);
+  padding-bottom: var(--space-10);
+}
+/* A page whose tables need the full column: text keeps the reading measure,
+   the table may run wider so each row stays one line. */
+.prose--wide { max-width: 58rem; }
+.prose--wide > p,
+.prose--wide > ul,
+.prose--wide > section > p { max-width: var(--measure-prose); }
+.prose h2 { margin-top: var(--space-8); font-size: var(--text-h2); }
+.prose h3 { margin-top: var(--space-7); }
+.prose section { margin-bottom: var(--space-8); }
+
+/* ── code ──────────────────────────────────────────────────────────────── */
+pre {
+  padding: var(--space-6);
+  border: var(--hairline);
+  border-radius: var(--radius-input);
+  background: var(--color-surface);
+  overflow-x: auto;
+  max-width: 100%;
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+}
+code { font-family: var(--font-mono); font-size: 0.9em; }
+:not(pre) > code {
+  padding: 0.12rem 0.3rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunk);
+  overflow-wrap: anywhere;
+}
+
+/* ── details and tables ────────────────────────────────────────────────── */
+details { border-bottom: var(--hairline); padding: var(--space-5) 0; }
+summary {
+  cursor: pointer;
+  font-weight: var(--weight-bold);
+  min-height: var(--tap-target);
+  align-content: center;
+  padding-right: var(--space-4);
+}
+details[open] summary { margin-bottom: var(--space-3); }
+details > :not(summary) { max-width: 70ch; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-block: var(--space-5);
+  font-size: var(--text-caption);
+}
+th, td {
+  padding: var(--space-3);
+  border-bottom: var(--hairline);
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--color-surface-sunk); font-weight: var(--weight-bold); white-space: nowrap; }
+td:first-child { color: var(--color-ink); }
+.table-scroll { overflow-x: auto; }
+
+/* ── footer ────────────────────────────────────────────────────────────── */
+.site-footer {
+  border-top: var(--hairline);
+  color: var(--color-ink-soft);
+  font-size: var(--text-caption);
+  padding-block: var(--space-8);
+}
+.site-footer .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-9);
+}
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  align-items: flex-start;
+}
+.site-footer nav a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.site-footer p { max-width: 60ch; }
+
+/* ── responsive ────────────────────────────────────────────────────────── */
+/* Header: the nav drops to its own row on narrow screens. */
+@media (max-width: 800px) {
+  .site-header > .container { gap: var(--space-2) var(--space-4); }
+  .site-header nav[aria-label="Main"] { order: 3; flex-basis: 100%; }
+  .site-header .header-cta { margin-left: auto; }
+  .site-header nav ul { gap: var(--space-1) var(--space-4); }
+  .prose { padding-bottom: var(--section-space-tight); }
+}
+/* Phone: one column, tighter section rhythm. Tablets keep the two-column
+   card rhythm, which is why this breakpoint is 640 and not 800. */
+@media (max-width: 640px) {
+  .faq-grid,
+  .card-grid { grid-template-columns: minmax(0, 1fr); }
+  .feature-row { padding-block: var(--space-8); }
+  h1 { max-width: 18ch; }
+  .hero .container { gap: var(--space-3); }
+}
+
+/* Hover lift is decorative and opt-in. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card { transition: var(--transition-card); }
+  .card:hover { transform: translateY(calc(var(--lift) * -1)); box-shadow: var(--shadow-raised); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* The staged FAQ sequence is decoration: with motion off it should simply be
+     there, not wait its turn. */
+  .faq-map-step,
+  .faq-map-step::before,
+  .faq-map-tick,
+  .faq-grid > details {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .faq-map-step::after { animation: none !important; opacity: 1 !important; }
+}
+
+@media print {
+  :root {
+    color-scheme: light;
+    --color-bg: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-surface-sunk: #F2F2F2;
+    --color-ink: #000000;
+    --color-ink-soft: #333333;
+    --color-line: #AAAAAA;
+    --color-accent-ink-strong: #075E54;
+    --shadow-card: none;
+    --shadow-media: none;
+    --shadow-raised: none;
+  }
+  html,
+  body { background: var(--color-bg); }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .site-header,
+  .site-footer,
+  .skip-link { display: none; }
+  .container { width: 100%; }
+  .hero,
+  main > section:not(.hero) { padding-block: var(--space-4); }
+  .hero--band,
+  .section--band { background: none; color: var(--color-ink); }
+  .hero--band h1,
+  .section--band h2,
+  .section--band h3 { color: var(--color-ink); }
+  .hero--band .lead,
+  .hero--band p,
+  .section--band p { color: var(--color-ink-soft); }
+  .ink-mark-svg { display: none; }
+  details > * { display: block; }
+  /* Nothing staged in print: paper has no clock. */
+  .faq-map-step,
+  .faq-map-tick,
+  .faq-grid > details {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .faq-map-step::before,
+  .faq-map-step::after { animation: none !important; opacity: 1 !important; }
+  h1 { font-size: var(--text-print-h1); }
+  h2, h3 { break-after: avoid; }
+  .card,
+  figure,
+  pre { break-inside: avoid; }
+}

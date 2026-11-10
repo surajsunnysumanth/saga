@@ -1,0 +1,23 @@
+# Roadmap
+- [x] Web UI prototype (chats, gallery, people, wrapped, search)
+- [x] Swift: decrypt crypt15 byte-identical to Python reference (verified: 366 MB DB, SHA-256 match, 1.7 s)
+- [x] Swift: importer (names, FTS5; media metadata, no file matching yet) - zero row diffs vs Python reference, 3.4 s vs minutes
+- [x] SwiftUI app: first-run wizard (backup file, key -> Keychain, Mac Contacts or .vcf, decrypt + import), chats, conversation, FTS search
+- [x] UI pass 1: chat list filters (All/People/Groups, sort, hide tiny chats), message filters, jump to date, search filters, dashboard charts
+- [x] People (list, sort, detail), Wrapped (per year), @mention names
+- [ ] LAST: media (lazy, on-demand; no bulk download of Drive-only files), Gallery; app icon + signed distribution
+- [ ] Gallery, People, Wrapped in SwiftUI; Contacts framework for names
+
+- [x] On-device "ask your archive"
+- [ ] iPhone backup ingest, other platforms
+- [x] Merge older archives into the newest backup (recovers messages deleted on the phone); increments (zip+protobuf) not parsed yet
+- [x] Update from phone button (pull, decrypt, merge); archive compaction later
+- [x] Archive compaction (retained files, verified, automatic after update); chat export (txt/html); shortcuts; app icon; dark mode checked
+- [x] Vault: segments (gz NDJSON), stable uid, gone-from-phone flags, vault-built index parity with direct import, choose-location wizard step, Change archive folder, legacy archive migration
+- [x] MCP server (saga-mcp, docs/MCP.md): read-only tools, prompts, block list
+- [x] On-device AI: "Catch me up" chat summaries (Apple Foundation Models, macOS 26+)
+- [x] AI ideas: topics per chat, semantic search, "who owes a reply" (all opt-in and local; see docs/AI.md)
+- [x] Spam pruning (per-chat rules in the vault, suggestions, restore)
+- [x] AI model layer: Apple, Ollama, LM Studio; Ask your archive
+- [ ] iPhone workflow (test device pending)
+- [ ] Live feed (whatsmeow sidecar): private spike, spare SIM only, not for release — see docs/LIVE-FEED.md

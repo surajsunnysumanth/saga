@@ -1,0 +1,40 @@
+name: Static site (manual publication)
+
+# Intentionally no push/PR trigger: this task must not deploy anything.
+# After release review, an owner can explicitly run this workflow.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python3 -m unittest discover -s scripts/tests -p test_site.py -v
+      - run: sh scripts/check_site.sh
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish approved static artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

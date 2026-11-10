@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — Saga</title>
+<meta name="description" content="Saga has no server: no account, no analytics and no cloud AI. What it stores on your Mac, and the few times a feature contacts another service.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f8f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B141A" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://surajsunnysumanth.github.io/saga/privacy.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Saga">
+<meta property="og:title" content="Privacy — Saga">
+<meta property="og:description" content="No account, no analytics, no cloud AI. What Saga stores on your Mac, and the few times a feature contacts another service.">
+<meta property="og:url" content="https://surajsunnysumanth.github.io/saga/privacy.html">
+<meta property="og:image" content="https://surajsunnysumanth.github.io/saga/assets/images/social.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy — Saga">
+<meta name="twitter:description" content="No account, no analytics, no cloud AI. Where your messages are, and when a feature reaches the network.">
+<meta name="twitter:image" content="https://surajsunnysumanth.github.io/saga/assets/images/social.jpg">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="container">
+<a class="brand" href="index.html"><img src="assets/favicon.png" alt="" width="36" height="36">Saga</a>
+<nav aria-label="Main"><ul><li><a href="features.html">Features</a></li><li><a href="privacy.html" aria-current="page">Privacy</a></li><li><a href="faq.html">FAQ</a></li><li><a href="https://github.com/surajsunnysumanth/saga">GitHub</a></li></ul></nav>
+<a class="button header-cta" href="https://github.com/surajsunnysumanth/saga/releases/latest/download/Saga.dmg">Download</a>
+</div></header>
+
+<main id="main" tabindex="-1">
+<section class="hero hero--page hero--solo hero--band"><div class="container">
+<div class="hero-copy">
+<h1>Know where your messages go.</h1>
+<p class="lead">Your history holds other people's words too. Here is what Saga keeps on your Mac, and the few times a feature contacts another service.</p>
+<div class="actions"><a class="button" href="#stored-locally">What stays local</a></div>
+</div>
+</div></section>
+
+<div class="container prose prose--wide">
+<p>Saga has no server. There's no account, no analytics and no cloud AI.</p>
+<p>We haven't yet published a network capture. Until we do, this page describes what the code does.</p>
+
+<h2 id="stored-locally">What stays on your Mac</h2>
+<ul>
+<li><strong>The vault.</strong> Append-only compressed message segments, media references and settings such as names, merges and clean-up rules. Compression is not encryption.</li>
+<li><strong>The search index.</strong> A local database of message text, contact identifiers and statistics. It is derived from the vault, so it can be rebuilt.</li>
+<li><strong>The backup key.</strong> Held in the macOS Keychain. Backup files and any copies you keep are yours to look after.</li>
+<li><strong>Encryption, if you turn it on.</strong> Off by default. When on, it seals the vault's message segments and settings with AES-256-GCM under your passphrase and an independent recovery code. The search index and caches stay readable.</li>
+</ul>
+
+<h2 id="leaves-mac">What can leave the Mac, and when</h2>
+<div class="table-scroll">
+<table>
+<thead><tr><th scope="col">Action</th><th scope="col">What happens</th></tr></thead>
+<tbody>
+<tr><td>Import, search, statistics, clean-up, merges</td><td>All local. A cloud-mounted vault involves your storage provider.</td></tr>
+<tr><td>Android tools download</td><td>Setup fetches Google's platform-tools. Google sees an ordinary download.</td></tr>
+<tr><td>Update check</td><td>Once a day, on launch, one request to <code>api.github.com</code> for Saga's latest release. It carries nothing but the request: no identifier, no archive data, no usage, no query string. The answer is a version number and a link.</td></tr>
+<tr><td>Summaries and questions</td><td>Apple Intelligence on device, or a local Ollama or LM Studio server.</td></tr>
+<tr><td>Link titles</td><td>One request to Spotify, YouTube or SoundCloud with the shared URL.</td></tr>
+<tr><td>Artwork</td><td>A remote thumbnail loads from the host that serves it.</td></tr>
+<tr><td>Embedded players</td><td>Opening a player loads that service's page, which sees your IP address.</td></tr>
+<tr><td>Cloud, NAS and media folders</td><td>Read through the storage provider you chose; an online-only file downloads.</td></tr>
+<tr><td>MCP client</td><td>Saga's server is local and read-only; the client decides where results go.</td></tr>
+<tr><td>Export, copy and share</td><td>Saved files and copied text go only where you send them.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="controls">Previews, players and the update check</h2>
+<p>Link previews are off by default. Turning one on sends the shared URL to that provider, and cached titles can still show while the toggle is off. Opening a player or an external link contacts its service either way.</p>
+<p>The update check is on by default and easy to turn off. It runs at most once every 24 hours, whether or not Saga finds a newer release, and a failed check is not retried until the next day. It stores three things on your Mac: when it last checked, the version it last saw, and any version you dismissed with the × on the Home banner. With <strong>Settings → Archive → Updates → Check for updates automatically</strong> switched off, Saga makes no request at all — the <strong>Check now</strong> button beside it goes dead too, so nothing can ask GitHub on your behalf.</p>
+
+<h2 id="practical-controls">Keeping it private</h2>
+<p>Keep the vault and its caches on storage you trust, and protect the whole Mac: deleting the search index does not delete the vault, and deleting local files is not a secure erase. For a strictly offline session, use a network restriction outside the app.</p>
+<p>Exports and Wrapped pages can quote messages and name people. Read one before you share it, and remember an export cannot be restored into WhatsApp.</p>
+<p>Vulnerability reporting and the project's threat boundaries are in <a href="https://github.com/surajsunnysumanth/saga/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+<p class="caption">This page mirrors <a href="https://github.com/surajsunnysumanth/saga/blob/main/PRIVACY.md">PRIVACY.md</a> in the source repository. The website itself makes no external requests, sets no cookies and uses no analytics.</p>
+</div>
+</main>
+
+<footer class="site-footer"><div class="container">
+<p>Saga is an independent open-source project. It is not affiliated with, endorsed by, or sponsored by WhatsApp or Meta. WhatsApp is a trademark of its respective owner. All screenshots use invented data.</p>
+<nav aria-label="Footer"><a href="privacy.html">Privacy</a><a href="get-started.html">Get started</a><a href="https://github.com/surajsunnysumanth/saga">GitHub</a><a href="https://github.com/surajsunnysumanth/saga/blob/main/LICENSE">License</a></nav>
+</div></footer>
+</body>
+</html>

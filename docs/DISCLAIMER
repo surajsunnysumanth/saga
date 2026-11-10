@@ -1,0 +1,9 @@
+Saga is an independent project. It is not affiliated with, endorsed by, or sponsored by WhatsApp or Meta. WhatsApp and Meta names and marks belong to their respective owners.
+
+Use Saga only with your own data and with the permissions needed to access, process and share it. Conversations can contain other people's personal information; having a backup does not give you permission to publish it.
+
+You are responsible for reviewing and complying with applicable service terms and laws. Saga does not grant permission to bypass access controls, obtain someone else's backup or account, or violate a service's terms. This document is not legal advice.
+
+Imports, local model output and archive statistics can be incomplete or inaccurate. Keep independent backups of source data. Imported vaults, indexes and exports may contain plaintext even when the source backup was encrypted. Review PRIVACY.md and SECURITY.md before use.
+
+The software is provided under the MIT License, including its warranty disclaimer. This notice does not replace the license.
